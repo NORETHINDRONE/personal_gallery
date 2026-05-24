@@ -1,4 +1,4 @@
-* 
+﻿* 
 {
   padding:0;
   margin:0;
@@ -91,6 +91,8 @@ main
   width: 75%;
   margin: 60px;
   text-align: center;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
 }
 
 .picture-frame img 
@@ -102,12 +104,15 @@ main
   margin: 0 auto;
   object-fit: cover;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .picture-frame img:hover
 {
   transform: scale(1.2);
+  will-change: transform;
 }
 
 footer 
