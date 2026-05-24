@@ -122,7 +122,10 @@ main
 {
   content: "";
   position: absolute;
-  inset: 4px;
+  top: 4px;
+  right: 4px;
+  bottom: 4px;
+  left: 4px;
   border-radius: 6px;
   background: #b89a78;
   opacity: 0;
@@ -232,7 +235,10 @@ main
 .lightbox
 {
   position: fixed;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: 100;
   background: rgba(0,0,0,0.92);
   display: flex;
@@ -367,7 +373,6 @@ footer a
   header
   {
     padding: 0 12px;
-    justify-content: space-between;
   }
 
   header ul 
@@ -381,6 +386,11 @@ footer a
     left: 50%;
     transform: translateX(-50%);
     width: auto;
+  }
+
+  .header-right
+  {
+    margin-left: auto;
   }
 
   .size-btn
