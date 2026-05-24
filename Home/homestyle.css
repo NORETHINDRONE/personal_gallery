@@ -9,12 +9,12 @@ body
   background-image: url("../images/9.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: fixed; /* 固定背景图片 */
+  background-attachment: fixed;
 }
 
 header 
 {
-  background-color:transparent;/*rgb(40, 40, 40);*/
+  background-color:transparent;
   backdrop-filter: blur(0.75px);
   height:80px;
   width:100%;
@@ -59,20 +59,10 @@ header a:hover
 
 .watermark 
 {
-  /*background-color: antiquewhite;
-  color:rgb(248, 246, 231);
-  min-height:92vh;
-  background-image: url("../images/9.jpg");
-  background-repeat: no-repeat;
-  background-size:cover;
-  background-position: center;
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  flex-grow: 1;*/
   height:92vh;
   display:flex;
-  align-items: cbackground-color rgb(250, 246, 231, 0.7); /* 半透明背景色以显示图片 */
+  align-items: center;
+  background-color: transparent;
   justify-content:center;
   flex-grow: 1;
 }
@@ -83,15 +73,6 @@ header a:hover
   margin-top:60px;
 }
 
-/*h2
-{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color:#FDD0A2;
-  font-size: clamp(12px, 2vw, 24px)
-}*/
-
 .floral-text
 {
   font-family: MyCustomFont;
@@ -101,20 +82,13 @@ header a:hover
 @font-face 
 {
   font-family: MyCustomFont;
-  src: url('../Fonts/alata-regular.ttf');
+  src: url("../Fonts/alata-regular.ttf");
   font-weight: normal;
   font-style: normal;
 }
 
 footer 
 {
-  /*background-color:rgb(180, 180, 180);
-  color:antiquewhite;
-  display:flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-  height:8vh;*/
   background-color: transparent;
   color:antiquewhite;
   display:flex;
@@ -135,7 +109,10 @@ footer a
   display:none;
 }
 
-/* 响应式设计 */
+main {
+  padding-top: 80px;
+}
+
 @media screen and (max-width: 768px) 
 {
 header ul 
@@ -165,5 +142,26 @@ header h1
   left:20px;
   border:none;
   cursor: pointer;
+}
+
+nav.mobile-visible ul
+{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 80px;
+  right: 0;
+  background-color: rgba(35, 35, 35, 0.95);
+  width: 160px;
+  padding: 10px 0;
+  line-height: 2.5;
+  text-align: center;
+  border-radius: 0 0 8px 8px;
+}
+
+nav.mobile-visible li
+{
+  display: block;
+  margin-right: 0;
 }
 }

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NORETHINDRONE - Personal photography gallery showcasing finest photographic works. Explore diverse landscapes, vibrant cultures, and intimate human emotions captured through the lens.">
     <title>NORETHINDRONE</title>
     <link rel="stylesheet" href="homestyle.css">
     <link rel="icon" href="../Icon/favicon.ico" type="image/x-icon">
@@ -10,22 +11,30 @@
 <body>
     <header>
     <h1 class="floral-text">NORETHINDRONE</h1>
-    <nav>
+    <button class="menu" onclick="toggleMenu()">&#9776;</button>
+    <nav id="mainNav">
     <ul>
-        <li><b class="floral-text"><a href="https://norethindrone.github.io/Photograph/Home/Home.html">HOME</a></b></li>
-        <li><b class="floral-text"><a href="https://norethindrone.github.io/Photograph/Gallery/Gallery.html">GALLERY</a></b></li>           
+        <li><b class="floral-text"><a href="../Home/Home.html">HOME</a></b></li>
+        <li><b class="floral-text"><a href="../Gallery/Gallery.html">GALLERY</a></b></li>           
     </ul>
     </nav>  
     </header>
 
     <main>
     <section class="watermark">
-    <!--<h2 class="floral-text"><em>L'existence précède L'essence</em></h2>-->
+    <!--<h2 class="floral-text"><em>L&apos;existence pr&eacute;c&egrave;de L&apos;essence</em></h2>-->
     </section>
     </main>
 
     <footer>
         <p><b class="floral-text"><a href="mailto:dl_benzoin@outlook.com">E-mail:dl_benzoin@outlook.com</a></b></p>
     </footer>
+
+    <script>
+    function toggleMenu() {
+        var nav = document.getElementById("mainNav");
+        nav.classList.toggle("mobile-visible");
+    }
+    </script>
 </body>
 </html>
