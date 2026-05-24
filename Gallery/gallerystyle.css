@@ -16,32 +16,43 @@ header
   background-color:rgb(35, 35, 35);
   height:80px;
   width:100%;
-  position:fixed;    
-  z-index: 1;
+  position:fixed;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5vw 0 120px;
+  box-sizing: border-box;
 }
 
 h1 
 {
   color:#FDD0A2;
-  position:absolute;
-  left:120px;
-  top:0;
   line-height: 80px;
   width:210px;
+  flex-shrink: 0;
+}
+
+.header-right
+{
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 header ul 
 {
-  position:absolute;
-  right:5vw;
-  top:0;
+  display: flex;
+  gap: 4vw;
+  list-style: none;
+  margin: 0;
+  padding: 0;
   line-height:80px;
 }
 
 header li 
 {
-  display:inline;
-  margin-right:4vw;    
+  display: inline;
 }
 
 header a 
@@ -76,45 +87,245 @@ main
   font-style: normal;
 }
 
+/* ---- Size Toggle: outer/inner frame design ---- */
+.size-toggle
+{
+  display: flex;
+  gap: 8px;
+}
+
+.size-btn
+{
+  /* outer frame */
+  width: 44px;
+  height: 44px;
+  border: 2px solid rgba(200,180,150,0.25);
+  border-radius: 10px;
+  background: none;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.size-btn:hover
+{
+  border-color: rgba(200,180,150,0.5);
+  color: #ddd;
+}
+
+/* inner frame (hidden by default, shown on active) */
+.size-btn::after
+{
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 6px;
+  background: #b89a78;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.size-btn.active
+{
+  border-color: #c9a87c;
+  color: #fff;
+}
+
+.size-btn.active::after
+{
+  opacity: 1;
+}
+
+/* SVG icon sits above the inner frame */
+.size-btn svg
+{
+  position: relative;
+  z-index: 1;
+}
+
+/* ==================== PICTURE FRAME (GRID) ==================== */
 .picture-frame
 {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  justify-content: space-between;
-  align-items: center;
-  justify-items: center;
-  width: 100%;
-}
-
-.picture-frame div
-{
-  width: 75%;
-  margin: 60px;
-  text-align: center;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 500px;
-}
-
-.picture-frame img 
-{
-  border-radius: 12px;
-  max-width: 100%;
-  max-height: 100%;
-  display: block;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 90%;
+  max-width: 1400px;
   margin: 0 auto;
-  object-fit: cover;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-  transition: transform 0.2s ease;
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  padding: 16px 0 40px;
+  align-items: start;
 }
 
-.picture-frame img:hover
+.picture-frame.size-small  { grid-template-columns: repeat(4, 1fr); }
+.picture-frame.size-medium { grid-template-columns: repeat(3, 1fr); }
+.picture-frame.size-large  { grid-template-columns: repeat(2, 1fr); }
+
+/* ==================== GRID ITEM ==================== */
+.grid-item
 {
-  transform: scale(1.2);
-  will-change: transform;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  background: #e8e4df;
+  transition: transform 0.3s ease, opacity 0.4s ease;
 }
 
+.grid-item:hover
+{
+  transform: scale(1.03);
+}
+
+.grid-item img
+{
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* ==================== SKELETON LOADING ==================== */
+.skeleton
+{
+  width: 100%;
+  background: linear-gradient(90deg, #e0dcd6 25%, #eee9e3 50%, #e0dcd6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite ease-in-out;
+  border-radius: 12px;
+  min-height: 200px;
+}
+
+@keyframes shimmer
+{
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ==================== ERROR PLACEHOLDER ==================== */
+.error-placeholder
+{
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 3/4;
+  min-height: 240px;
+  background: #f0ece7;
+  border-radius: 12px;
+  color: #999;
+  font-size: 13px;
+  gap: 8px;
+}
+
+.grid-item.error .error-placeholder
+{
+  display: flex;
+}
+
+/* ==================== LIGHTBOX ==================== */
+.lightbox
+{
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  cursor: pointer;
+}
+
+.lightbox.visible
+{
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox img
+{
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 4px;
+  cursor: default;
+  box-shadow: 0 4px 40px rgba(0,0,0,0.6);
+}
+
+.lightbox-close
+{
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 42px;
+  cursor: pointer;
+  z-index: 2;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.lightbox-close:hover
+{
+  color: #fff;
+}
+
+.lightbox-prev,
+.lightbox-next
+{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.12);
+  border: none;
+  color: #ccc;
+  font-size: 56px;
+  width: 60px;
+  height: 80px;
+  cursor: pointer;
+  z-index: 2;
+  border-radius: 8px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+
+.lightbox-prev:hover,
+.lightbox-next:hover
+{
+  background: rgba(255,255,255,0.25);
+  color: #fff;
+}
+
+.lightbox-counter
+{
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #aaa;
+  font-size: 14px;
+  font-family: inherit;
+  letter-spacing: 2px;
+  z-index: 2;
+}
+
+/* ==================== FOOTER ==================== */
 footer 
 {
   background-color:rgb(35, 35, 35);
@@ -132,33 +343,116 @@ footer a
   text-decoration: none;
 }
 
-
+/* ==================== MOBILE MENU ==================== */
 .menu 
 {
   display:none;
 }
 
+/* ==================== RESPONSIVE ==================== */
+@media screen and (max-width: 1024px)
+{
+  .picture-frame.size-small,
+  .picture-frame.size-medium,
+  .picture-frame.size-large
+  {
+    grid-template-columns: repeat(2, 1fr);
+    width: 95%;
+    gap: 16px;
+  }
+}
+
 @media screen and (max-width: 768px) 
 {
-header ul 
-{
-  display:none;
-}
+  header
+  {
+    padding: 0 12px;
+    justify-content: space-between;
+  }
 
-header h1 
-{
-  left:50%;
-  transform: translateX(-50%);
-}
+  header ul 
+  {
+    display:none;
+  }
 
-.picture-frame
-{
-  grid-template-columns: 1fr;
-}
+  h1 
+  {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+  }
 
-.picture-frame div
-{
-  width: 85%;
-  margin: 30px;
-}
+  .size-btn
+  {
+    width: 40px;
+    height: 40px;
+  }
+
+  .size-btn svg
+  {
+    width: 16px;
+    height: 16px;
+  }
+
+  .picture-frame.size-small,
+  .picture-frame.size-medium,
+  .picture-frame.size-large
+  {
+    grid-template-columns: 1fr;
+    width: 92%;
+    gap: 20px;
+  }
+
+  .lightbox-prev,
+  .lightbox-next
+  {
+    font-size: 40px;
+    width: 44px;
+    height: 60px;
+  }
+
+  .lightbox-prev { left: 8px; }
+  .lightbox-next { right: 8px; }
+
+  .lightbox-close
+  {
+    top: 12px;
+    right: 16px;
+    font-size: 32px;
+  }
+
+  .menu 
+  {
+    display:block;
+    background-color: transparent;
+    color:white;
+    font-size: 35px;
+    position:absolute;
+    top:15px;
+    left:20px;
+    border:none;
+    cursor: pointer;
+  }
+
+  nav.mobile-visible ul
+  {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 80px;
+    right: 0;
+    background-color: rgba(35, 35, 35, 0.95);
+    width: 160px;
+    padding: 10px 0;
+    line-height: 2.5;
+    text-align: center;
+    border-radius: 0 0 8px 8px;
+    gap: 0;
+  }
+
+  nav.mobile-visible li
+  {
+    display: block;
+  }
 }
