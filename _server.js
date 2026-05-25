@@ -5,7 +5,7 @@ const multer  = require("multer");
 const sizeOf  = require("image-size");
 const sharp   = require("sharp");
 const { v4: uuidv4 } = require("uuid");
-const { exec } = require("child_process");
+const { exec, spawn } = require("child_process");
 
 const basePath = path.resolve(__dirname);
 const PORT     = 8080;
@@ -61,16 +61,43 @@ function savePhotos(photos) {
 }
 
 function gitSync(message) {
-  const safeMsg = message.replace(/"/g, "\\\"");
-  const cmd = `git add images/ data/photos.json && git commit -m "` + safeMsg + `" && git push`;
-  exec(cmd, { cwd: basePath }, function (err, stdout, stderr) {
-    if (err) {
-      console.error("Git sync failed:", err.message);
-      if (stderr) console.error(stderr);
+  // Step 1: git add
+  var add = spawn("git", ["add", "images/", "data/photos.json"], { cwd: basePath });
+  add.stderr.on("data", function (d) { process.stderr.write(d); });
+  add.on("close", function (addCode) {
+    if (addCode !== 0) {
+      console.error("Git add failed with code:", addCode);
       return;
     }
-    console.log("Git synced:", message);
-    if (stdout) console.log(stdout.trim());
+
+    // Step 2: git commit (message as separate arg, no shell escaping needed)
+    var commit = spawn("git", ["commit", "-m", message], { cwd: basePath });
+    var commitStderr = "";
+    commit.stderr.on("data", function (d) { commitStderr += d.toString(); });
+    commit.on("close", function (commitCode) {
+      if (commitCode !== 0) {
+        if (commitStderr.includes("nothing to commit") || commitStderr.includes("nothing added")) {
+          console.log("Git: nothing to commit");
+          return;
+        }
+        console.error("Git commit failed with code:", commitCode);
+        console.error(commitStderr.trim());
+        return;
+      }
+
+      // Step 3: git push
+      var push = spawn("git", ["push"], { cwd: basePath });
+      var pushStderr = "";
+      push.stderr.on("data", function (d) { pushStderr += d.toString(); });
+      push.on("close", function (pushCode) {
+        if (pushCode !== 0) {
+          console.error("Git push failed with code:", pushCode);
+          console.error(pushStderr.trim());
+          return;
+        }
+        console.log("Git synced:", message);
+      });
+    });
   });
 }
 
