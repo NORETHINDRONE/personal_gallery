@@ -5,7 +5,7 @@
   // CONFIG - replace these after setting up OAuth App and Netlify
   // ============================================================
   var CONFIG = {
-    clientId: "YOUR_GITHUB_CLIENT_ID",
+    clientId: "Ov23liqO8WNVms0ebTQn",
     redirectUri: window.location.origin + "/Admin/admin.html",
     oauthProxy: "https://YOUR_NETLIFY_SITE.netlify.app/api/oauth",
     owner: "NORETHINDRONE",
