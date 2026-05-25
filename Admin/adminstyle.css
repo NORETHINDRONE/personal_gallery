@@ -322,6 +322,103 @@ footer a {
   display: none;
 }
 
+
+/* ---- login card ---- */
+.login-card {
+  max-width: 400px;
+  margin: 80px auto 0;
+  background: #e8e4df;
+  border-radius: 12px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  padding: 48px 40px;
+  text-align: center;
+}
+
+.login-icon {
+  margin-bottom: 16px;
+}
+
+.login-card h2 {
+  color: #333;
+  font-size: 20px;
+  font-family: MyCustomFont;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+}
+
+.login-desc {
+  color: #999;
+  font-size: 13px;
+  font-family: MyCustomFont;
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+
+.login-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #333;
+  color: #FDD0A2;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: MyCustomFont;
+  letter-spacing: 2px;
+  font-size: 15px;
+  transition: background 0.2s ease;
+}
+
+.login-btn:hover {
+  background: #555;
+}
+
+/* ---- user bar ---- */
+.user-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  background: #e8e4df;
+  border-radius: 12px;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #c9a87c;
+}
+
+.user-name {
+  font-family: MyCustomFont;
+  letter-spacing: 2px;
+  color: #555;
+  font-size: 14px;
+  flex: 1;
+}
+
+.logout-btn {
+  background: none;
+  border: 1px solid #d5cec4;
+  border-radius: 8px;
+  padding: 6px 16px;
+  color: #999;
+  cursor: pointer;
+  font-family: MyCustomFont;
+  letter-spacing: 1px;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  border-color: #c45c5c;
+  color: #c45c5c;
+}
+
 /* ---- responsive ---- */
 @media screen and (max-width: 1024px) {
   .photo-grid {
