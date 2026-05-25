@@ -1,0 +1,391 @@
+﻿* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: MyCustomFont, sans-serif;
+}
+
+/* ---- header ---- */
+header {
+  background-color: rgb(35, 35, 35);
+  height: 80px;
+  width: 100%;
+  position: fixed;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5vw 0 120px;
+  box-sizing: border-box;
+}
+
+h1 {
+  color: #FDD0A2;
+  line-height: 80px;
+  width: 210px;
+  flex-shrink: 0;
+}
+
+header ul {
+  display: flex;
+  gap: 4vw;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  line-height: 80px;
+}
+
+header li {
+  display: inline;
+}
+
+header a {
+  color: #FDD0A2;
+  text-decoration: none;
+}
+
+header a:hover {
+  text-decoration: underline;
+}
+
+.floral-text {
+  font-family: MyCustomFont;
+  letter-spacing: 4px;
+}
+
+@font-face {
+  font-family: MyCustomFont;
+  src: url("../Fonts/alata-regular.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ---- main ---- */
+main {
+  flex-grow: 1;
+  padding-top: 80px;
+  background: linear-gradient(180deg, #DFD8D0 0%, rgb(207,204,201) 100%);
+}
+
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 40px;
+}
+
+/* ---- upload section ---- */
+.upload-section {
+  background: #e8e4df;
+  border-radius: 12px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  padding: 28px 32px;
+  margin-bottom: 32px;
+}
+
+.upload-section h2 {
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-family: MyCustomFont;
+  letter-spacing: 3px;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.file-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.file-input-wrapper input[type="file"] {
+  display: none;
+}
+
+.file-label {
+  background: #fff;
+  border: 2px dashed #c9a87c;
+  border-radius: 10px;
+  padding: 12px 24px;
+  color: #8b7355;
+  cursor: pointer;
+  font-family: MyCustomFont;
+  letter-spacing: 2px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.file-label:hover {
+  border-color: #FDD0A2;
+  color: #c9a87c;
+  background: #fef9f3;
+}
+
+.file-name {
+  color: #888;
+  font-size: 13px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 16px;
+  border: 2px solid #d5cec4;
+  border-radius: 10px;
+  font-size: 14px;
+  background: #fff;
+  color: #333;
+  font-family: MyCustomFont;
+  letter-spacing: 2px;
+  transition: border-color 0.2s ease;
+}
+
+.title-input:focus {
+  outline: none;
+  border-color: #c9a87c;
+}
+
+.title-input::placeholder {
+  color: #bbb;
+}
+
+.upload-btn {
+  background: #c9a87c;
+  color: #fff;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: MyCustomFont;
+  letter-spacing: 3px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.upload-btn:hover {
+  background: #b89a78;
+}
+
+.upload-status {
+  font-size: 13px;
+  margin-top: 8px;
+  min-height: 20px;
+  color: #888;
+}
+
+.upload-status.success {
+  color: #6b8e5a;
+}
+
+.upload-status.error {
+  color: #c45c5c;
+}
+
+/* ---- divider ---- */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #d5cec4;
+}
+
+.section-divider span {
+  color: #999;
+  font-family: MyCustomFont;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+/* ---- photo grid ---- */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.photo-card {
+  background: #e8e4df;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.photo-card:hover {
+  transform: scale(1.02);
+}
+
+.photo-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.photo-card .card-info {
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.photo-card .card-title {
+  font-size: 13px;
+  color: #555;
+  font-family: MyCustomFont;
+  letter-spacing: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.delete-btn {
+  background: none;
+  border: 1px solid #d5cec4;
+  border-radius: 8px;
+  padding: 4px 10px;
+  color: #999;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: MyCustomFont;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.delete-btn:hover {
+  border-color: #c45c5c;
+  color: #c45c5c;
+  background: rgba(196, 92, 92, 0.05);
+}
+
+/* ---- empty state ---- */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #aaa;
+  font-family: MyCustomFont;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+/* ---- footer ---- */
+footer {
+  background-color: rgb(35, 35, 35);
+  color: rgb(230, 230, 230);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  height: 8vh;
+}
+
+footer a {
+  color: #FDD0A2;
+  text-decoration: none;
+}
+
+.menu {
+  display: none;
+}
+
+/* ---- responsive ---- */
+@media screen and (max-width: 1024px) {
+  .photo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  header {
+    padding: 0 12px;
+  }
+
+  header ul {
+    display: none;
+  }
+
+  h1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+  }
+
+  .photo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .title-input {
+    width: 100%;
+  }
+
+  .menu {
+    display: block;
+    background-color: transparent;
+    color: white;
+    font-size: 35px;
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    border: none;
+    cursor: pointer;
+  }
+
+  nav.mobile-visible ul {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 80px;
+    right: 0;
+    background-color: rgba(35, 35, 35, 0.95);
+    width: 160px;
+    padding: 10px 0;
+    line-height: 2.5;
+    text-align: center;
+    border-radius: 0 0 8px 8px;
+    gap: 0;
+  }
+
+  nav.mobile-visible li {
+    display: block;
+  }
+}

@@ -1,0 +1,15 @@
+﻿{
+  "name": "personal-gallery",
+  "version": "1.0.0",
+  "description": "NORETHINDRONE personal photography gallery with local admin backend",
+  "main": "_server.js",
+  "scripts": {
+    "start": "node _server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "image-size": "^1.1.1",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^10.0.0"
+  }
+}

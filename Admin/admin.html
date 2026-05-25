@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN | NORETHINDRONE</title>
+    <link rel="stylesheet" href="adminstyle.css">
+    <link rel="icon" href="../Icon/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+    <h1 class="floral-text">NORETHINDRONE</h1>
+    <button class="menu" onclick="toggleMenu()">&#9776;</button>
+    <nav id="mainNav">
+    <ul>
+        <li><b class="floral-text"><a href="../Home/Home.html">HOME</a></b></li>
+        <li><b class="floral-text"><a href="../Gallery/Gallery.html">GALLERY</a></b></li>
+        <li><b class="floral-text"><a href="/admin">ADMIN</a></b></li>
+    </ul>
+    </nav>
+    </header>
+
+    <main>
+        <div class="admin-container">
+
+            <!-- upload section -->
+            <div class="upload-section">
+                <h2>UPLOAD PHOTO</h2>
+                <div class="upload-form">
+                    <div class="form-row">
+                        <div class="file-input-wrapper">
+                            <input type="file" id="fileInput" accept="image/jpeg,image/png">
+                            <label for="fileInput" class="file-label" id="fileLabel">SELECT IMAGE</label>
+                            <span class="file-name" id="fileName"></span>
+                        </div>
+                        <input type="text" class="title-input" id="titleInput" placeholder="Title (optional)">
+                        <button class="upload-btn" id="uploadBtn">UPLOAD</button>
+                    </div>
+                    <div class="upload-status" id="uploadStatus"></div>
+                </div>
+            </div>
+
+            <!-- divider -->
+            <div class="section-divider">
+                <span>PHOTOS</span>
+            </div>
+
+            <!-- photo grid -->
+            <div class="photo-grid" id="photoGrid">
+            </div>
+            <div class="empty-state" id="emptyState" style="display:none">No photos yet</div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p><b class="floral-text"><a href="mailto:dl_benzoin@outlook.com">E-mail:dl_benzoin@outlook.com</a></b></p>
+    </footer>
+
+    <script>
+    function toggleMenu() {
+        var nav = document.getElementById("mainNav");
+        nav.classList.toggle("mobile-visible");
+    }
+    </script>
+    <script src="admin.js"></script>
+</body>
+</html>
