@@ -3,12 +3,16 @@ const fs      = require("fs");
 const path    = require("path");
 const multer  = require("multer");
 const sizeOf  = require("image-size");
+const sharp   = require("sharp");
 const { v4: uuidv4 } = require("uuid");
 const { exec } = require("child_process");
 
 const basePath = path.resolve(__dirname);
 const PORT     = 8080;
 const DATA_FILE = path.join(basePath, "data", "photos.json");
+const THUMB_DIR = path.join(basePath, "images", "thumbnails");
+const THUMB_WIDTH = 400;
+const THUMB_QUALITY = 70;
 
 // --- multer setup: save uploaded images to images/ with UUID name ---
 const storage = multer.diskStorage({
@@ -70,6 +74,74 @@ function gitSync(message) {
   });
 }
 
+// --- thumbnail generation ---
+
+function ensureThumbDir() {
+  if (!fs.existsSync(THUMB_DIR)) {
+    fs.mkdirSync(THUMB_DIR, { recursive: true });
+    console.log("Created thumbnail directory:", THUMB_DIR);
+  }
+}
+
+function getThumbPath(imageFilename) {
+  const parsed = path.parse(imageFilename);
+  // Always use .jpg extension for thumbnails (PNG originals get JPEG thumbnails)
+  return path.join(THUMB_DIR, parsed.name + ".jpg");
+}
+
+async function generateThumbnail(sourcePath, thumbPath) {
+  try {
+    await sharp(sourcePath)
+      .resize({ width: THUMB_WIDTH, withoutEnlargement: true })
+      .jpeg({ quality: THUMB_QUALITY })
+      .toFile(thumbPath);
+    console.log("Thumbnail generated:", path.basename(thumbPath));
+    return true;
+  } catch (e) {
+    console.error("Failed to generate thumbnail for", sourcePath, ":", e.message);
+    return false;
+  }
+}
+
+async function scanAndGenerateMissingThumbnails() {
+  ensureThumbDir();
+
+  const photos = loadPhotos();
+  if (photos.length === 0) return;
+
+  console.log("Scanning for missing thumbnails...");
+  let generated = 0;
+
+  for (const photo of photos) {
+    const srcPath = path.join(basePath, photo.src);
+    if (!fs.existsSync(srcPath)) continue;
+
+    const imageFilename = path.basename(photo.src);
+    const thumbPath = getThumbPath(imageFilename);
+
+    // Update thumb field in photo record
+    const thumbRelative = "images/thumbnails/" + path.basename(thumbPath);
+    photo.thumb = thumbRelative;
+
+    // Generate if missing
+    if (!fs.existsSync(thumbPath)) {
+      const ok = await generateThumbnail(srcPath, thumbPath);
+      if (ok) generated++;
+    }
+  }
+
+  if (generated > 0) {
+    savePhotos(photos);
+    console.log("Generated", generated, "missing thumbnails, photos.json updated.");
+  } else if (photos.some(p => p.thumb && !fs.existsSync(path.join(basePath, p.thumb)))) {
+    // photos.json had stale thumb references? re-check
+    savePhotos(photos);
+    console.log("Updated photos.json with thumb fields.");
+  } else {
+    console.log("All thumbnails up to date.");
+  }
+}
+
 // --- init ---
 const app = express();
 
@@ -108,7 +180,7 @@ app.get("/api/photos", function (req, res) {
 });
 
 // POST upload photo
-app.post("/api/photos", upload.single("photo"), function (req, res) {
+app.post("/api/photos", upload.single("photo"), async function (req, res) {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
@@ -127,6 +199,12 @@ app.post("/api/photos", upload.single("photo"), function (req, res) {
       console.error("Failed to read image dimensions:", e.message);
     }
 
+    // generate thumbnail
+    ensureThumbDir();
+    const thumbPath = getThumbPath(filename);
+    await generateThumbnail(filePath, thumbPath);
+    const thumbRelative = "images/thumbnails/" + path.basename(thumbPath);
+
     const title = req.body.title || "";
     const alt = title || "Photography work";
 
@@ -134,6 +212,7 @@ app.post("/api/photos", upload.single("photo"), function (req, res) {
     const newPhoto = {
       id: uuidv4(),
       src: "images/" + filename,
+      thumb: thumbRelative,
       title: title,
       alt: alt,
       w: w,
@@ -169,6 +248,16 @@ app.delete("/api/photos/:id", function (req, res) {
     console.error("Failed to delete image file:", e.message);
   }
 
+  // delete thumbnail file
+  if (photo.thumb) {
+    const thumbPath = path.join(basePath, photo.thumb);
+    try {
+      if (fs.existsSync(thumbPath)) fs.unlinkSync(thumbPath);
+    } catch (e) {
+      console.error("Failed to delete thumbnail file:", e.message);
+    }
+  }
+
   photos.splice(idx, 1);
   savePhotos(photos);
   res.json({ success: true });
@@ -179,4 +268,8 @@ app.delete("/api/photos/:id", function (req, res) {
 app.listen(PORT, function () {
   console.log("Gallery server running at http://localhost:" + PORT + "/");
   console.log("Admin panel at http://localhost:" + PORT + "/admin");
+  // Thumbnail scan on startup
+  scanAndGenerateMissingThumbnails().catch(function (e) {
+    console.error("Thumbnail scan failed:", e.message);
+  });
 });

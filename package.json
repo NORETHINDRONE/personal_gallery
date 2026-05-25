@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "personal-gallery",
   "version": "1.0.0",
   "description": "NORETHINDRONE personal photography gallery with local admin backend",
@@ -10,6 +10,7 @@
     "express": "^4.21.0",
     "image-size": "^1.1.1",
     "multer": "^1.4.5-lts.1",
+    "sharp": "^0.34.5",
     "uuid": "^10.0.0"
   }
 }

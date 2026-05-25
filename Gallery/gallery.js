@@ -91,10 +91,12 @@
       skeleton.className = "skeleton";
       skeleton.style.paddingBottom = ratio + "%";
 
-      // lazy image
+      // lazy image — use thumbnail for grid, fallback to original
+      var thumbSrc = (img.thumb) ? ("../" + img.thumb) : ("../" + img.src);
+
       var imgEl = document.createElement("img");
       imgEl.alt = img.alt;
-      imgEl.setAttribute("data-src", "../" + img.src);
+      imgEl.setAttribute("data-src", thumbSrc);
       imgEl.className = "lazy-img";
 
       // error fallback
@@ -182,6 +184,7 @@
 
   function showLightboxImage() {
     var img = galleryData[lightboxIndex];
+    // Lightbox always uses full-resolution original
     lightboxImg.src = "../" + img.src;
     lightboxImg.alt = img.alt;
     var counter = lightbox.querySelector(".lightbox-counter");

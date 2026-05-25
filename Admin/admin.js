@@ -113,7 +113,8 @@
       card.className = "photo-card";
 
       var img = document.createElement("img");
-      img.src = "../" + photo.src;
+      // Use thumbnail for admin grid display, fallback to original
+      img.src = "../" + (photo.thumb || photo.src);
       img.alt = photo.alt || "";
 
       var info = document.createElement("div");
