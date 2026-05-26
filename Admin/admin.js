@@ -2,12 +2,9 @@
   "use strict";
 
   // ============================================================
-  // CONFIG - replace these after setting up OAuth App and Netlify
+  // CONFIG
   // ============================================================
   var CONFIG = {
-    clientId: "Ov23liqO8WNVms0ebTQn",
-    redirectUri: window.location.origin + "/Admin/admin.html",
-    oauthProxy: "https://aesthetic-crepe-82c4a4.netlify.app/api/oauth",
     owner: "NORETHINDRONE",
     repo: "personal_gallery",
     photosPath: "data/photos.json",
@@ -45,16 +42,6 @@
     photoGrid      = document.getElementById("photoGrid");
     emptyState     = document.getElementById("emptyState");
 
-    // Check for OAuth callback code
-    var params = new URLSearchParams(window.location.search);
-    var code = params.get("code");
-    if (code) {
-      // Clean URL
-      window.history.replaceState({}, document.title, window.location.pathname);
-      exchangeCode(code);
-      return;
-    }
-
     // Check for existing token
     var stored = sessionStorage.getItem("gh_token");
     if (stored) {
@@ -68,7 +55,7 @@
   });
 
   // ============================================================
-  // OAUTH
+  // AUTH
   // ============================================================
   function showLogin() {
     if (loginSection) loginSection.style.display = "block";
@@ -82,12 +69,32 @@
     loadPhotos();
   }
 
-  window.doLogin = function () {
-    var authUrl = "https://github.com/login/oauth/authorize" +
-      "?client_id=" + CONFIG.clientId +
-      "&redirect_uri=" + encodeURIComponent(CONFIG.redirectUri) +
-      "&scope=public_repo";
-    window.location.href = authUrl;
+  window.signInWithToken = function () {
+    var tokenInput = document.getElementById("tokenInput");
+    var loginStatus = document.getElementById("loginStatus");
+    var token = tokenInput ? tokenInput.value.trim() : "";
+
+    if (!token) {
+      if (loginStatus) { loginStatus.textContent = "Please enter a token"; loginStatus.className = "login-status error"; }
+      return;
+    }
+
+    if (loginStatus) { loginStatus.textContent = "Verifying..."; loginStatus.className = "login-status"; }
+
+    // Validate token by calling /user
+    fetch("https://api.github.com/user", {
+      headers: { Authorization: "Bearer " + token, Accept: "application/vnd.github.v3+json" }
+    }).then(function (r) {
+      if (!r.ok) return r.json().then(function (e) { throw new Error(e.message || "Invalid token (HTTP " + r.status + ")"); });
+      return r.json();
+    }).then(function (user) {
+      accessToken = token;
+      sessionStorage.setItem("gh_token", token);
+      if (loginStatus) { loginStatus.textContent = ""; loginStatus.className = "login-status"; }
+      showAdmin();
+    }).catch(function (e) {
+      if (loginStatus) { loginStatus.textContent = "Auth failed: " + e.message; loginStatus.className = "login-status error"; }
+    });
   };
 
   window.doLogout = function () {
@@ -97,21 +104,6 @@
     showLogin();
   };
 
-  function exchangeCode(code) {
-    setStatus("Authenticating...", "");
-    fetch(CONFIG.oauthProxy + "?code=" + encodeURIComponent(code))
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        if (data.error) throw new Error(data.error);
-        accessToken = data.access_token;
-        sessionStorage.setItem("gh_token", accessToken);
-        showAdmin();
-      })
-      .catch(function (e) {
-        setStatus("Auth failed: " + e.message, "error");
-        showLogin();
-      });
-  }
 
   function fetchUserInfo() {
     ghGet("/user").then(function (user) {
