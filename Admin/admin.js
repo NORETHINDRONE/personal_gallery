@@ -7,7 +7,7 @@
   var CONFIG = {
     clientId: "Ov23liqO8WNVms0ebTQn",
     redirectUri: window.location.origin + "/Admin/admin.html",
-    oauthProxy: "https://YOUR_NETLIFY_SITE.netlify.app/api/oauth",
+    oauthProxy: "https://aesthetic-crepe-82c4a4.netlify.app/api/oauth",
     owner: "NORETHINDRONE",
     repo: "personal_gallery",
     photosPath: "data/photos.json",
